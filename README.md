@@ -6,7 +6,7 @@ This is a MERN stack web application for a food delivery service, allowing users
 
 
 ## Live Demo
-Explore the live demo of the application at: [Live Demo Link](https://food-delivery-application-ma.vercel.app/)
+Explore the live demo of the application at: [Live Demo Link](https://ak7292.github.io/Theen_app_food-delivery-application/)
 
 ## Demo Login Credentials
 Use the following credentials to test the application:
