@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theen App: Smart Meal Customizer</title>
+  <style>
+    /* Loading overlay styles */
+    #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.8);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #009688;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Blur effect during loading */
+    body.loading *:not(#loadingOverlay) {
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    #startSection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    #startButton {
+      margin-top: 15px;
+      padding: 12px 30px;
+      font-size: 18px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+
+    #startButton:hover {
+      background-color: #00796B;
+      transform: scale(1.05);
+    }
+
+    .sidenav a {
+      display: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #da230b, #1bf107);
+      display: flex;
+    }
+
+    #mySidenav a {
+      position: absolute;
+      left: -240px;
+      transition: 0.4s ease;
+      padding: 15px;
+      width: 320px;
+      text-decoration: none;
+      font-size: 16px;
+      color: white;
+      border-radius: 0 10px 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #mySidenav a:hover {
+      left: 0;
+      transform: scale(1.03);
+    }
+
+    .slider {
+      width: 80px;
+      margin-left: 10px;
+    }
+
+    .ingredient-label {
+      flex-grow: 1;
+      font-weight: 600;
+      padding-right: 10px;
+    }
+
+    .value-display {
+      width: 60px;
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .unit {
+      margin-left: 4px;
+      font-size: 14px;
+    }
+
+    #ing1 { top: 20px; background: linear-gradient(45deg, #FF6F61, #ff9d8c); }
+    #ing2 { top: 70px; background: linear-gradient(45deg, #6B5B95, #9c88ff); }
+    #ing3 { top: 120px; background: linear-gradient(45deg, #88B04B, #b5e853); }
+    #ing4 { top: 170px; background: linear-gradient(45deg, #FFA500, #ffc04d); }
+    #ing5 { top: 220px; background: linear-gradient(45deg, #00CED1, #70f2f6); }
+    #ing6 { top: 270px; background: linear-gradient(45deg, #FF1493, #ff85c1); }
+    #ing7 { top: 320px; background: linear-gradient(45deg, #20B2AA, #74d4cc); }
+    #ing8 { top: 370px; background: linear-gradient(45deg, #FFD700, #ffe066); }
+    #ing9 { top: 420px; background: linear-gradient(45deg, #DC143C, #ff597b); }
+    #ing10 { top: 470px; background: linear-gradient(45deg, #4682B4, #7fbfff); }
+    #ing11 { top: 520px; background: linear-gradient(45deg, #32CD32, #7ff77f); }
+    #ing12 { top: 570px; background: linear-gradient(45deg, #8A2BE2, #c088ff); }
+
+    .main-content {
+      margin-left: 340px;
+      padding: 40px;
+      flex-grow: 1;
+    }
+
+    .summary {
+      margin-top: 70px;
+      background-color: #ffffffdd;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+    }
+
+    .summary h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .summary p {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+
+    .summary p span {
+      float: right;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="loading">
+
+<!-- Loading overlay -->
+<div id="loadingOverlay">Loading...</div>
+
+<div id="mySidenav" class="sidenav">
+  <!-- Ingredient Buttons will be added dynamically -->
+</div>
+
+<div class="main-content">
+  <div id="startSection" style="margin-bottom: 30px; padding: 30px; background: linear-gradient(to right, #e0f7fa, #ffffff); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 700px; margin-top: 85px;">
+    <h2 style="font-size: 28px; color: #00796B; display: flex; align-items: center; justify-content: center;">
+      <span style="margin-left: 10px;">Customize Your Meal with Smart Nutrition</span>
+    </h2>
+    <p style="font-size: 16px; color: #444; margin-top: 10px;">
+      Use the side sliders to select your preferred quantity of nutrients like <strong>Protein</strong>, <strong>Carbs</strong>, <strong>Vitamins</strong> and more.<br>
+      Your total selection summary will appear here live, and our system will suggest meals tailored just for you!
+    </p>
+    <a href="https://food-delivery-application-ma.vercel.app/"><button id="suggestFoodBtn" style="background-color:#00796B; border-radius: 5px; padding: 5px;">SUGGEST FOOD</button></a>
+    <br>
+    <b>Click Below for Without Suggested Meal Ordering.</b>
+    <a href="https://food-delivery-application-ma.vercel.app/"><button id="startButton" onclick="startCustomization()">ORDER NOW WITHOUT SUGGESTION</button></a>
+  </div>
+</div>
+
+<div class="summary" id="summary">
+  <h3 align="center">Overview of Selected Ingredients</h3>
+  <div id="summaryItems"></div>
+</div>
+
+<script>
+  const ingredients = [
+    { id: 'ing1', name: '1.) Protein', unit: 'g' },
+    { id: 'ing2', name: '2.) Carbohydrates', unit: 'g' },
+    { id: 'ing3', name: '3.) Fats', unit: 'g' },
+    { id: 'ing4', name: '4.) Fiber', unit: 'g' },
+    { id: 'ing5', name: '5.)  Vitamin A', unit: 'mg' },
+    { id: 'ing6', name: '6.) Vitamin C', unit: 'mg' },
+    { id: 'ing7', name: '7.) Calcium', unit: 'mg' },
+    { id: 'ing8', name: '8.) Iron', unit: 'mg' },
+    { id: 'ing9', name: '9.) Magnesium', unit: 'mg' },
+    { id: 'ing10', name: '10.) Zinc', unit: 'mg' },
+    { id: 'ing11', name: '11.) Potassium', unit: 'mg' },
+    { id: 'ing12', name: '12.) Omega-3', unit: 'ml' },
+  ];
+
+  const sidenav = document.getElementById('mySidenav');
+  const summaryDiv = document.getElementById('summaryItems');
+
+  ingredients.forEach((ing, index) => {
+    const a = document.createElement('a');
+    a.id = ing.id;
+
+    const label = document.createElement('span');
+    label.className = 'ingredient-label';
+    label.textContent = ing.name;
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.className = 'slider';
+    slider.min = 0;
+    slider.max = 100;
+    slider.value = 0;
+    slider.dataset.name = ing.name;
+    slider.dataset.unit = ing.unit;
+
+    const valueDisplay = document.createElement('span');
+    valueDisplay.className = 'value-display';
+    valueDisplay.innerHTML = `0 <span class="unit">${ing.unit}</span>`;
+
+    slider.addEventListener('input', () => {
+      valueDisplay.innerHTML = `${slider.value} <span class="unit">${ing.unit}</span>`;
+      document.getElementById(`summary-${ing.name}`).textContent = `${slider.value} ${ing.unit}`;
+    });
+
+    a.appendChild(label);
+    a.appendChild(slider);
+    a.appendChild(valueDisplay);
+    sidenav.appendChild(a);
+
+    const summaryLine = document.createElement('p');
+    summaryLine.innerHTML = `${ing.name}<span id="summary-${ing.name}">0 ${ing.unit}</span>`;
+    summaryDiv.appendChild(summaryLine);
+  });
+
+  function startCustomization() {
+    const buttons = document.querySelectorAll('.sidenav a');
+    buttons.forEach(btn => {
+      btn.style.display = 'flex';
+    });
+
+    document.getElementById("summary").scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const foodSuggestions = [
+    "Paneer Butter Masala", "Chicken Biryani", "Veg Salad", "Grilled Sandwich", "Fruit Bowl",
+    "Dal Tadka", "Roti Sabzi", "Egg Curry", "Pasta", "Veggie Pizza", "Keto Smoothie", "Tofu Stir Fry"
+  ];
+
+  document.getElementById("suggestFoodBtn").addEventListener("click", () => {
+    const randomFood = foodSuggestions[Math.floor(Math.random() * foodSuggestions.length)];
+    const iframeInput = document.querySelector("input[type='search'], input[type='text'], input");
+    if (iframeInput) {
+      iframeInput.value = randomFood;
+      iframeInput.focus();
+    } else {
+      alert("Search bar not found on the page!");
+    }
+  });
+
+  // Show page after 5 seconds
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      document.body.classList.remove('loading');
+    }, 5000);
+  });
+</script>
+
+</body>
+</html>
